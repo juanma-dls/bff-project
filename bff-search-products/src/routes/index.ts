@@ -1,9 +1,9 @@
 import express, { NextFunction, Request, Response } from "express";
-import productRoutes from "./productRoutes";
+import searchProductRoutes from "./searchProductRoutes";
 
 const app = express();
 
-app.use("/api", productRoutes);
+app.use("/api", searchProductRoutes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err);
@@ -11,7 +11,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.use("/health", (req, res) => {
-  res.status(200).json({ status: "INT-PRODUCTS-MS status OK" });
+  res.status(200).json({ status: "BFF status OK" });
 });
 
 export default app;

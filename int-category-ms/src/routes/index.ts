@@ -10,8 +10,8 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({ error: "Internal Server Error" });
 });
 
-app.use("health", (req, res) => {
-  res.status(200).json({ status: "UP" });
+app.use("/health", (req, res) => {
+  res.status(200).json({ status: "INT-CATEGORY-MS status OK" });
 });
 
 export default app;

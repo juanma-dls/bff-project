@@ -44,6 +44,21 @@ services:
     command: npm run dev
     networks:
       - ms-net
+  
+  bff-search-products:
+    build:
+      context: ./bff-search-products
+    image: bff-search-products:latest
+    container_name: bff-search-products
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./bff-search-products:/usr/src/app
+    environment:
+      NODE_ENV: development
+    command: npm run dev
+    networks:
+      - ms-net
 
 networks:
   ms-net:
