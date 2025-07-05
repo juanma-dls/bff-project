@@ -13,18 +13,18 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "axios": "^1.10.0",
-    "dotenv": "^17.0.1",
-    "express": "^5.1.0",
-    "morgan": "^1.10.0"
+    "axios": "1.10.0",
+    "dotenv": "17.0.1",
+    "express": "5.1.0",
+    "morgan": "1.10.0"
   },
   "devDependencies": {
-    "@types/express": "^5.0.3",
-    "@types/morgan": "^1.9.10",
-    "@types/node": "^24.0.10",
-    "semistandard": "^17.0.0",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.8.3"
+    "@types/express": "5.0.3",
+    "@types/morgan": "1.9.10",
+    "@types/node": "24.0.10",
+    "semistandard": "17.0.0",
+    "ts-node-dev": "2.0.0",
+    "typescript": "5.8.3"
   },
   "eslintConfig": {
     "extends": "semistandard"
