@@ -6,9 +6,24 @@ services:
     image: int-products-ms:latest
     container_name: int-products-ms
     ports:
-      - "3001:3000"
+      - "3000:3000"
     volumes:
       - ./int-products-ms:/usr/src/app
+    environment:
+      NODE_ENV: development
+    command: npm run dev
+    networks:
+      - ms-net
+
+  int-category-ms:
+    build:
+      context: ./int-category-ms
+    image: int-category-ms:latest
+    container_name: int-category-ms
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./int-category-ms:/usr/src/app
     environment:
       NODE_ENV: development
     command: npm run dev
