@@ -11,6 +11,10 @@ app.use("/health", (req, res) => {
   res.status(200).json({ status: "BFF status OK" });
 });
 
+app.all("*", (req: Request) => {
+  throw new NotFoundError(req.path)
+})
+
 app.use(errorHandler);
 
 export default app;

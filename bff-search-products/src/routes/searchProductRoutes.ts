@@ -6,5 +6,4 @@ const router = Router();
 
 router.get("/searchProdcuts", validateRequest, searchProductController);
 
-
 export default router;
