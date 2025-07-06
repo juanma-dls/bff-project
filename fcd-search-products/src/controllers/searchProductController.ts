@@ -3,26 +3,24 @@ import { productService } from "../services/productService";
 import { freeShippingService } from "../services/freeShippingService";
 import { categoryService } from "../services/categoryService";
 import { SearchResponse } from "../interface/searchInterface";
+import CustomError from "../utils/errors/customError";
 
 export const searchProductController = async (req: Request, res: Response, next: NextFunction ) => {
 
   try {
     const products = await productService(req);
     if (!products || products.length === 0) {
-      res.status(404).json({ error: "No products found" });
-      return;
+      throw new CustomError('Products not found', 404);
     };
 
     const freeShippingIds = await freeShippingService(req);
     if (!freeShippingIds || freeShippingIds.size === 0) {
-      res.status(404).json({ error: "No free shipping products found" });
-      return;
+      throw new CustomError('Free Shipping Ids not found', 404);
     };
 
     const categories = await categoryService(req);
     if (!categories || categories.length === 0) {
-      res.status(404).json({ error: "No categories found" });
-      return;
+      throw new CustomError('Categories not found', 404);
     };
 
     const productWhithFreeShipping = (id: string) => {
