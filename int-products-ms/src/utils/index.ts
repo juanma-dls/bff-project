@@ -1,13 +1,13 @@
 import express, { NextFunction, Request, Response } from "express";
-import productRoutes from "./productRoutes";
+import categoryRoutes from "../routes"
 import errorHandler from "../utils/middlewares/errorHandler";
 
 const app = express();
 
-app.use("/api", productRoutes);
+app.use("/api", categoryRoutes );
 
 app.use("/health", (req, res) => {
-  res.status(200).json({ status: "FCD status OK" });
+  res.status(200).json({ status: "INT-CATEGORY-MS status OK" });
 });
 
 app.use(errorHandler);

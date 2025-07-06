@@ -9,4 +9,6 @@ export const environment = {
   CATEGORIES_MS_URL: process.env.CATEGORIES_MS_URL || "",
   CATEGORIES_MS_PATH: process.env.CATEGORIES_MS_PATH || "",
   TIMEOUT: process.env.TIMEOUT ? parseInt(process.env.TIMEOUT, 10) : 20000,
+  TOKEN_VALIDO: process.env.TOKEN_VALIDO || "",
+  TOKEN_ALTERNATIVO: process.env.TOKEN_ALTERNATIVO || "",
 };
