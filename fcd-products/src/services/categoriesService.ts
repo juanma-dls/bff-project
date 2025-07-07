@@ -3,7 +3,7 @@ import { environment } from "../config/environment";
 import { Request } from "express";
 import { parsePath } from "../utils/functions";
 
-export const categoryService = async (req: Request) => {
+export const categoriesService = async (req: Request) => {
   const parseUrlPath = parsePath(environment.CATEGORIES_MS_PATH, {
     req
   });

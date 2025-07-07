@@ -5,6 +5,6 @@ import validateRequest from "../utils/middlewares/validateRequest";
 
 const router = Router();
 
-router.get("/products-search", validateRequest, setHeaders ,searchProductController);
+router.get("/search", validateRequest, setHeaders ,searchProductController);
 
 export default router;

@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { productService } from "../services/productService";
+import { productsService } from "../services/productsService";
 import { freeShippingService } from "../services/freeShippingService";
-import { categoryService } from "../services/categoryService";
 import { SearchResponse } from "../interface/searchInterface";
 import CustomError from "../utils/errors/customError";
 import parseSearchParams from "../helpers/searchParamsHelper";
@@ -10,7 +9,7 @@ import { Products } from "../interface/productInterface";
 export const searchProductController = async (req: Request, res: Response, next: NextFunction ) => {
 
   try {
-    const products = await productService(req);
+    const products = await productsService(req);
     if (!products || products.products.length === 0) {
       throw new CustomError('Products not found', 404);
     };
@@ -18,11 +17,6 @@ export const searchProductController = async (req: Request, res: Response, next:
     const freeShippingIds = await freeShippingService(req);
     if (!freeShippingIds || freeShippingIds.size === 0) {
       throw new CustomError('Free Shipping Ids not found', 404);
-    };
-
-    const categories = await categoryService(req);
-    if (!categories || categories.length === 0) {
-      throw new CustomError('Categories not found', 404);
     };
 
     const productWhithFreeShipping = (id: string) => {
@@ -39,15 +33,12 @@ export const searchProductController = async (req: Request, res: Response, next:
       return true
     })
 
-    const categoriesSet = Array.from(new Set(filteredProducts.map((product: any) => product.category)));
-
     const restult: SearchResponse = {
       paging: {
         total: filteredProducts.length,
         offset: products.offset || 0,
         limit: products.limit || 10
       },
-      categories: categoriesSet,
       items: filteredProducts.map((product: Products) => {
         return {
           id: product.id,

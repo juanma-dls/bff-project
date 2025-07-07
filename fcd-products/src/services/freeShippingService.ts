@@ -7,7 +7,7 @@ import CustomError from "../utils/errors/customError";
 export const freeShippingService = async (req: Request) => {
   try {
     const url = `${environment.PRODUCTS_MS_URL}${environment.FREE_SHIPPING_MS_PATH}`;
-    console.log("url free_shipping -->", url)
+
     const { data } = await axios.get(url, {
       timeout: environment.TIMEOUT,
     });
