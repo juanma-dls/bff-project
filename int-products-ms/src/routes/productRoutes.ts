@@ -4,8 +4,8 @@ import { freeShippingController } from "../controllers/freeShippingController";
 
 const router = Router();
 
-router.get("/products/search", productController);
+router.get("/search", productController);
 
-router.get("/products/free_shipping", freeShippingController);
+router.get("/free_shipping", freeShippingController);
 
 export default router;
