@@ -11,7 +11,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
   }
 
   res.status(400).send({
-    errors: [{ message: `Something went corrupte` }]
+    errors: [{ message: err.message }]
   });
   next(err);
 }
