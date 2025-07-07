@@ -6,17 +6,16 @@ import CustomError from "../utils/errors/customError";
 
 export const categoryService = async (req: Request) => {
   try {
+  const { category } = req.params
   const parseUrlPath = parsePath(environment.CATEGORY_MS_PATH, {
     req
   });
-  console.log("parseUrlPath --->", parseUrlPath);
-  const url = `${environment.PRODUCTS_MS_URL}${parseUrlPath}`;
-  console.log("url --->", url);
+  const url = `${environment.PRODUCTS_MS_URL}${parseUrlPath}${category}`;
   const { data } = await axios.get(url, {
     params: req.query,
     timeout: environment.TIMEOUT,
   });
-  console.log("data --->", data);
+
   return data.products || [];
 } catch (error: any) {
     const status = error.response?.status || 500;
