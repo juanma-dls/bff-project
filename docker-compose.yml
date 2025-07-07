@@ -30,30 +30,30 @@ services:
     networks:
       - ms-net
 
-  fcd-search-products:
+  fcd-products:
     build:
-      context: ./fcd-search-products
-    image: fcd-search-products:latest
-    container_name: fcd-search-products
+      context: ./fcd-products
+    image: fcd-products:latest
+    container_name: fcd-products
     ports:
       - "3002:3002"
     volumes:
-      - ./fcd-search-products:/usr/src/app
+      - ./fcd-products:/usr/src/app
     environment:
       NODE_ENV: development
     command: npm run dev
     networks:
       - ms-net
   
-  bff-search-products:
+  bff-products:
     build:
-      context: ./bff-search-products
-    image: bff-search-products:latest
-    container_name: bff-search-products
+      context: ./bff-products
+    image: bff-products:latest
+    container_name: bff-products
     ports:
       - "3003:3003"
     volumes:
-      - ./bff-search-products:/usr/src/app
+      - ./bff-products:/usr/src/app
     environment:
       NODE_ENV: development
     command: npm run dev
