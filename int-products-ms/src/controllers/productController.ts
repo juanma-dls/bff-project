@@ -10,7 +10,7 @@ export const productController = async (req: Request, res: Response, next: NextF
       return;
     }
 
-    res.status(200).json(products);
+    res.status(200).json({products, skip: req.query.skip , limit: req.query.limit, });
 
   } catch (error) {
     next(error);
