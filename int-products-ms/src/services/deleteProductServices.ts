@@ -1,15 +1,13 @@
 import axios from "axios";
 import { environment } from "../config/environment";
 import { Request } from "express";
-import { parsePath } from "../utils/functions";
 import CustomError from "../utils/errors/customError";
 import { parseError } from "../helper/parseError";
 
 export const deleteProductServices = async (req: Request) => {
   try {
     const { id } = req.params
-    const parseUrlPath = parsePath(environment.DELETE_PRODUCTS_MS_PATH, {id});
-    const url = `${environment.PRODUCTS_MS_URL}${parseUrlPath}${id}`;
+    const url = `${environment.PRODUCTS_MS_URL}${environment.DELETE_PRODUCTS_MS_PATH}${id}`;
     const { data } = await axios.delete(url, {
       params: req.query,
       timeout: environment.TIMEOUT,
