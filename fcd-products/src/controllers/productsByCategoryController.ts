@@ -8,10 +8,7 @@ import { Products } from "../interface/productInterface";
 
 export const productsByCategoryController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const categories = await categoriesService(req);
-    if (!categories || categories.length === 0) {
-      throw new CustomError('Categories not found', 404);
-    }
+    const categories = await categoriesService();
 
     const categoryParam = req.params.category;
     const validCategory = categories.includes(categoryParam);
@@ -20,22 +17,16 @@ export const productsByCategoryController = async (req: Request, res: Response, 
     }
 
     const products = await productByCategoryService(req);
-    if (!products || products.products.length === 0) {
-      throw new CustomError('Products not found', 404);
-    }
 
     const freeShippingProducts = await freeShippingService(req);
-    if (!freeShippingProducts || freeShippingProducts.length === 0) {
-      throw new CustomError('Free Shipping Ids not found', 404);
-    }
 
-    const freeShippingSet = new Set(freeShippingProducts.map((product: any) => product.id));
+    const freeShippingSet = new Set(freeShippingProducts.map((product: Products) => product.id));
 
     const response: SearchResponse = {
       paging: {
         total: products.products.length,
-        offset: req.query.offset ? parseInt(req.query.offset as string, 10) : 0,
-        limit: req.query.limit ? parseInt(req.query.limit as string, 10) : 10
+        offset: req.query.offset ? +(req.query.offset as string, 10) : 0,
+        limit: req.query.limit ? +(req.query.limit as string, 10) : 10
       },
       items: products.products.map((product: Products) => ({
         id: product.id,

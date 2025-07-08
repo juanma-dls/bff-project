@@ -1,16 +1,11 @@
 import axios from "axios";
 import { environment } from "../config/environment";
 import { Request } from "express";
-import { parsePath } from "../utils/functions";
 
-export const categoriesService = async (req: Request) => {
-  const parseUrlPath = parsePath(environment.CATEGORIES_MS_PATH, {
-    req
-  });
-  const url = `${environment.CATEGORIES_MS_URL}${parseUrlPath}`;
+export const categoriesService = async () => {
+  const url = `${environment.CATEGORIES_MS_URL}${environment.CATEGORIES_MS_PATH}`;
 
   const { data } = await axios.get(url, {
-    params: req.query,
     timeout: environment.TIMEOUT,
   });
   
