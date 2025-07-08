@@ -3,8 +3,8 @@ export interface Products {
   title: string;
   category?: string;
   price: number;
-  picture: string;
-  price_with_discount: number;
+  thumbnail: string;
+  discountPercentage: number;
   rating: number;
   free_shipping: boolean;
 }

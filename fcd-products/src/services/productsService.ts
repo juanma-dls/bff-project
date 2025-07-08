@@ -12,9 +12,10 @@ export const productsService = async (req: Request) => {
       params: req.query,
       timeout: environment.TIMEOUT,
     });
-
-    if (data.products && data.products.length > 0) {
-      return data;
+    const productsData = data.products;
+    
+    if (productsData && productsData.products.length > 0) {
+      return productsData;
     } else {
       throw new CustomError("Products not found", 404);
     }

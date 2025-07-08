@@ -6,6 +6,9 @@ export interface SearchResponse {
     offset: number;
     limit: number;
   };
-  categories?: unknown [];
-  items: Products [];
-};
+  categories?: unknown[];
+  category?: {
+    name: string;
+  };
+  items: Products[];
+}

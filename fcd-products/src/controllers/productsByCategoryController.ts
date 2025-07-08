@@ -6,6 +6,7 @@ import { freeShippingService } from "../services/freeShippingService";
 import { SearchResponse } from "../interface/searchInterface";
 import { Products } from "../interface/productInterface";
 
+
 export const productsByCategoryController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const categories = await categoriesService();
@@ -28,12 +29,16 @@ export const productsByCategoryController = async (req: Request, res: Response, 
         offset: req.query.offset ? +(req.query.offset as string, 10) : 0,
         limit: req.query.limit ? +(req.query.limit as string, 10) : 10
       },
+      category: {
+        name: categoryParam
+      }
+      ,
       items: products.products.map((product: Products) => ({
         id: product.id,
         title: product.title,
         price: product.price,
-        picture: product.picture,
-        price_with_discount: product.price_with_discount,
+        picture: product.thumbnail,
+        price_with_discount: Number((product.price * (1 - product.discountPercentage / 100)).toFixed(2)),
         rating: product.rating,
         freeShipping: freeShippingSet.has(product.id),
       }))
