@@ -5,6 +5,7 @@ export const environment = {
   PORT: process.env.PORT || 3000,
   PRODUCTS_MS_URL: process.env.PRODUCTS_MS_URL || "",
   PRODUCTS_MS_PATH: process.env.PRODUCTS_MS_PATH || "",
+  DELETE_PRODUCTS_MS_PATH: process.env.DELETE_PRODUCTS_MS_PATH || "",
   FREE_SHIPPING_MS_PATH: process.env.FREE_SHIPPING_MS_PATH || "",
   CATEGORY_PRODUCT_MS_PATH: process.env.CATEGORY_PRODUCT_MS_PATH || "",
   CATEGORIES_MS_URL: process.env.CATEGORIES_MS_URL || "",

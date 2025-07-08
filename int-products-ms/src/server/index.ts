@@ -4,7 +4,7 @@ import morgan from 'morgan';
 
 const server = express();
 
-server.use(express.json());
+server.use(express.json({limit: "50mb"}));
 server.use(morgan('combined'));
 
 server.use("/", router);
