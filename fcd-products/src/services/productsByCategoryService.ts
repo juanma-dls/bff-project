@@ -1,7 +1,5 @@
-import { Request } from "express";
 import { environment } from "../config/environment";
 import CustomError from "../utils/errors/customError";
-import { parsePath } from "../utils/functions";
 import axios from "axios";
 import { parseError } from "../helpers/parseError";
 
