@@ -16,9 +16,9 @@ export const productsByCategoryController = async (req: Request, res: Response, 
       throw new CustomError("Category is not valid", 400);
     }
 
-    const products = await productByCategoryService(req);
+    const products = await productByCategoryService(categoryParam);
 
-    const freeShippingProducts = await freeShippingService(req);
+    const freeShippingProducts = await freeShippingService();
 
     const freeShippingSet = new Set(freeShippingProducts.map((product: Products) => product.id));
 
@@ -38,7 +38,7 @@ export const productsByCategoryController = async (req: Request, res: Response, 
         freeShipping: freeShippingSet.has(product.id),
       }))
     };
-
+    console.log("response", response);
     return res.status(200).json(response);
   } catch (error) {
     next(error);

@@ -1,24 +1,25 @@
-import { Request } from "express";
 import { environment } from "../config/environment";
 import CustomError from "../utils/errors/customError";
-import { parsePath } from "../utils/functions";
 import axios from "axios";
+import { parseError } from "../helpers/parseError";
 
 export const deleteProductByIdService = async (productId: string) => {
   try {
-    const parseUrlPath = parsePath(environment.DELETE_PRODUCTS_MS_PATH, { productId });
-    const url = `${environment.PRODUCTS_MS_URL}${parseUrlPath}${productId}`;
+    
+    const url = `${environment.PRODUCTS_MS_URL}${environment.DELETE_PRODUCTS_MS_PATH}${productId}`;
 
     const { data } = await axios.delete(url, {
       timeout: environment.TIMEOUT,
     });
+
+    if (data.product) {
+      return data;
+    } else {
+      throw new CustomError("Products not found", 404);
+    }
     
-    return data;
-
-  } catch (error: any) {
-    const status = error.response?.status || 500;
-    const message = error.response?.data?.errors?.[0]?.message || error.message || 'Error';
-
+  } catch (error: unknown) {
+    const { status, message } = parseError(error, "Error while fetching products", 500);
     throw new CustomError(message, status);
   }
 }

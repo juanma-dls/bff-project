@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { productsService } from "../services/productsService";
 import { freeShippingService } from "../services/freeShippingService";
 import { SearchResponse } from "../interface/searchInterface";
-import CustomError from "../utils/errors/customError";
 import parseSearchParams from "../helpers/searchParamsHelper";
 import { Products } from "../interface/productInterface";
 
@@ -10,14 +9,8 @@ export const searchProductController = async (req: Request, res: Response, next:
 
   try {
     const products = await productsService(req);
-    if (!products || products.products.length === 0) {
-      throw new CustomError('Products not found', 404);
-    };
 
-    const freeShippingIds = await freeShippingService(req);
-    if (!freeShippingIds || freeShippingIds.size === 0) {
-      throw new CustomError('Free Shipping Ids not found', 404);
-    };
+    const freeShippingIds = await freeShippingService();
 
     const productWhithFreeShipping = (id: string) => {
       const find_product = freeShippingIds.filter((product: any) => product.id === id);

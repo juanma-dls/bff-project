@@ -11,12 +11,13 @@ export const deleteProductsByCategoryController = async (req: Request, res: Resp
     const categories = await categoriesService();
     
     const categoryParam = req.params.category;
+
     const validCategory = categories.includes(categoryParam);
     if (!validCategory) {
       throw new CustomError("Category is not valid", 400);
     }
 
-    const { products } = await productByCategoryService(req);
+    const { products } = await productByCategoryService(categoryParam);
 
     const deleteResults = await Promise.allSettled(
       products.map((product: Products) => deleteProductByIdService(product.id))
