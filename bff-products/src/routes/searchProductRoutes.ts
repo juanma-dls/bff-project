@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { searchProductController } from "../controllers/productController";
+import { searchProductsController } from "../controllers/searchProductsController";
 import validateRequest from "../utils/middlewares/validateRequest";
 
 const router = Router();
 
-router.get("/searchProducts", validateRequest, searchProductController);
+router.get("/search", validateRequest, searchProductsController);
 
 export default router;
