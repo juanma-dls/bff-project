@@ -2,28 +2,42 @@ import axios from "axios";
 import { environment } from "../config/environment";
 import { Request } from "express";
 import CustomError from "../utils/errors/customError";
-import { parseError } from "../helper/parseError";
+import { parseError } from "../helpers/parseError";
+import { SearchParams } from "../types/searchTypes";
 
 export const productService = async (req: Request) => {
   try {
-    const { offset, ...otherQueryParams } = req.query;
+    // Extraemos y parseamos los parámetros esperados
+    const {
+      query,
+      sortField,
+      sortOrder,
+      limit,
+      offset,
+    } = req.query as Partial<Record<keyof SearchParams, string>>;
 
-    const queryParams = {
-      ...otherQueryParams,
-      skip: offset, // DummyJSON usa "skip"
-    };
+    const params: Record<string, any> = {};
+
+    if (query) params.q = query;
+    if (limit) params.limit = Number(limit);
+    if (offset) params.skip = Number(offset);  // offset → skip en DummyJSON
+
+    if (sortField && (sortField === "price" || sortField === "rating")) {
+      params.sortBy = sortField;
+    }
+    if (sortOrder && (sortOrder === "asc" || sortOrder === "desc")) {
+      params.order = sortOrder;
+    }
 
     const url = `${environment.PRODUCTS_MS_URL}${environment.PRODUCTS_MS_PATH}`;
 
     const { data } = await axios.get(url, {
-      params: queryParams,
+      params,
       timeout: environment.TIMEOUT,
     });
 
-    const products = data.products;
-
-    if (products && products.length > 0) {
-      return products;
+    if (data.products && data.products.length > 0) {
+      return data;
     } else {
       throw new CustomError("Products not found", 404);
     }
