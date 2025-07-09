@@ -22,8 +22,8 @@ export const searchProductController = async (req: Request, res: Response, next:
       if (title && !product.title.toLowerCase().includes(title.toLowerCase())) return false;
       return true;
     });
-
-    const categoriesSet = Array.from(new Set(productsResponse.products.map((product: Products) => product.category)));
+    
+    const categoriesSet = Array.from(new Set(filteredProducts.map((product: Products) => product.category)));
 
     const result: SearchResponse = {
       paging: {

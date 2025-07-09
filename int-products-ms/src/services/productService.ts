@@ -2,33 +2,21 @@ import axios from "axios";
 import { environment } from "../config/environment";
 import { Request } from "express";
 import CustomError from "../utils/errors/customError";
-import { parseError } from "../helpers/parseError";
-import { SearchParams } from "../types/searchTypes";
 
 export const productService = async (req: Request) => {
+
   try {
-    // Extraemos y parseamos los parámetros esperados
-    const {
-      query,
-      sortField,
-      sortOrder,
-      limit,
-      offset,
-    } = req.query as Partial<Record<keyof SearchParams, string>>;
+
+    const { query, sortField, sortOrder, limit, offset } = req.query as Record<string, string>;
 
     const params: Record<string, any> = {};
 
     if (query) params.q = query;
     if (limit) params.limit = Number(limit);
-    if (offset) params.skip = Number(offset);  // offset → skip en DummyJSON
-
-    if (sortField && (sortField === "price" || sortField === "rating")) {
-      params.sortBy = sortField;
-    }
-    if (sortOrder && (sortOrder === "asc" || sortOrder === "desc")) {
-      params.order = sortOrder;
-    }
-
+    if (offset) params.skip = Number(offset);
+    if (sortField) params.sortBy = sortField;
+    if (sortOrder) params.order = sortOrder;
+  
     const url = `${environment.PRODUCTS_MS_URL}${environment.PRODUCTS_MS_PATH}`;
 
     const { data } = await axios.get(url, {
@@ -37,12 +25,15 @@ export const productService = async (req: Request) => {
     });
 
     if (data.products && data.products.length > 0) {
-      return data;
+      return { products: data.products, total: data.total, skip: data.skip, limit: data.limit };
     } else {
       throw new CustomError("Products not found", 404);
     }
-  } catch (error: unknown) {
-    const { status, message } = parseError(error, "Error while fetching products", 500);
-    throw new CustomError(message, status);
+
+  } catch (error: any) {
+      const status = error.response?.status || 500;
+      const message = error.response?.data?.errors?.[0]?.message || error.message || 'Error';
+
+      throw new CustomError(message, status);
   }
 };
