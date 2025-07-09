@@ -1,4 +1,4 @@
-import { Products } from "./productInterface";
+import { ProductItem } from "./productItemInterfase";
 
 export interface SearchResponse {
   paging: {
@@ -10,5 +10,5 @@ export interface SearchResponse {
   category?: {
     name: string;
   };
-  items: Products[];
+  items: ProductItem[];
 }

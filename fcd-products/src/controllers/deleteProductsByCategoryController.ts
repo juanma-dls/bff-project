@@ -4,10 +4,16 @@ import { categoriesService } from "../services/categoriesService";
 import { productByCategoryService } from "../services/productsByCategoryService";
 import { deleteProductByIdService } from "../services/deleteProductByIdService";
 import { Products } from "../interface/productInterface";
+import { generateDeleteMockProducts } from "../helpers/mockProductsHelper";
 
 
 export const deleteProductsByCategoryController = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    if (req.isMock) {
+      const mockResponse = generateDeleteMockProducts();
+      return res.status(200).json(mockResponse);
+    } 
+    
     const categories = await categoriesService();
     
     const categoryParam = req.params.category;

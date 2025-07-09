@@ -1,17 +1,21 @@
 import { NextFunction, Request, Response } from "express";
 import { productsService } from "../services/productsService";
 import { freeShippingService } from "../services/freeShippingService";
-import { SearchResponse } from "../interface/searchInterface";
+import { SearchResponse } from "../interface/searchResponseInterface";
 import parseSearchParams from "../helpers/searchParamsHelper";
 import { Products } from "../interface/productInterface";
+import { generateSearchMockProducts } from "../helpers/mockProductsHelper";
 
 
 export const searchProductController = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    if (req.isMock) {
+      const mockResponse = generateSearchMockProducts();
+      return res.status(200).json(mockResponse);
+    }
+
     const productsResponse = await productsService(req);
-
     const freeShippingProducts = await freeShippingService();
-
     const freeShippingSet = new Set(freeShippingProducts.map((product: Products) => product.id));
 
     const { minPrice, maxPrice, title } = parseSearchParams(req.query);
@@ -28,7 +32,7 @@ export const searchProductController = async (req: Request, res: Response, next:
     const result: SearchResponse = {
       paging: {
         total: filteredProducts.length,
-        offset: productsResponse.skip || 0,  // dummy usa skip
+        offset: productsResponse.skip || 0,
         limit: productsResponse.limit || 10,
       },
       categories: categoriesSet,
