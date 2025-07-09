@@ -6,7 +6,7 @@ import { parseError } from "../helpers/parseError";
 
 const ALLOWED_SORT_FIELDS = ["price", "rating"];
 const DEFAULT_SORT_FIELD = "id";
-const DEFAULT_SORT_ORDER = "desc";
+const DEFAULT_SORT_ORDER = "asc";
 
 export const productsService = async (req: Request) => {
   try {
@@ -20,7 +20,7 @@ export const productsService = async (req: Request) => {
 
     const msParams: Record<string, any> = {
       sortField: sortField || DEFAULT_SORT_FIELD,
-      sortOrder: sortOrder === "asc" ? "asc" : DEFAULT_SORT_ORDER,
+      sortOrder: sortOrder === "desc" ? "desc" : DEFAULT_SORT_ORDER,
       query: query,
       limit: limit,
       offset: offset

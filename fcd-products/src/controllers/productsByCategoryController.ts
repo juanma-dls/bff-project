@@ -3,12 +3,18 @@ import CustomError from "../utils/errors/customError";
 import { categoriesService } from "../services/categoriesService";
 import { productByCategoryService } from "../services/productsByCategoryService";
 import { freeShippingService } from "../services/freeShippingService";
-import { SearchResponse } from "../interface/searchInterface";
+import { SearchResponse } from "../interface/searchResponseInterface";
 import { Products } from "../interface/productInterface";
+import { generateCategoryMockProducts } from "../helpers/mockProductsHelper";
 
 
 export const productsByCategoryController = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    if (req.isMock) {
+      const mockResponse = generateCategoryMockProducts()
+      return res.status(200).json(mockResponse);
+    }
+    
     const categories = await categoriesService();
 
     const categoryParam = req.params.category;
@@ -38,7 +44,7 @@ export const productsByCategoryController = async (req: Request, res: Response, 
         title: product.title,
         price: product.price,
         picture: product.thumbnail,
-        price_with_discount: Number((product.price * (1 - product.discountPercentage / 100)).toFixed(2)),
+        price_discount: Number((product.price * product.discountPercentage / 100).toFixed(2)),
         rating: product.rating,
         freeShipping: freeShippingSet.has(product.id),
       }))

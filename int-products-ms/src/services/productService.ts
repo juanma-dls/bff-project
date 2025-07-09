@@ -18,7 +18,7 @@ export const productService = async (req: Request) => {
     if (sortOrder) params.order = sortOrder;
   
     const url = `${environment.PRODUCTS_MS_URL}${environment.PRODUCTS_MS_PATH}`;
-    console.log("params ms -->", params);
+    
     const { data } = await axios.get(url, {
       params,
       timeout: environment.TIMEOUT,
