@@ -1,26 +1,39 @@
 import axios from "axios";
 import { environment } from "../config/environment";
 import { Request } from "express";
-import { parsePath } from "../utils/functions";
 import CustomError from "../utils/errors/customError";
 
 export const productService = async (req: Request) => {
 
   try {
-  const parseUrlPath = parsePath(environment.PRODUCTS_MS_PATH, {
-    req
-  });
-  const url = `${environment.PRODUCTS_MS_URL}${parseUrlPath}`;
 
-  const { data } = await axios.get(url, {
-    params: req.query,
-    timeout: environment.TIMEOUT,
-  });
-  return data.products || [];
-} catch (error: any) {
-    const status = error.response?.status || 500;
-    const message = error.response?.data?.errors?.[0]?.message || error.message || 'Error';
+    const { query, sortField, sortOrder, limit, offset } = req.query as Record<string, string>;
 
-    throw new CustomError(message, status);
-}
-}
+    const params: Record<string, any> = {};
+
+    if (query) params.q = query;
+    if (limit) params.limit = Number(limit);
+    if (offset) params.skip = Number(offset);
+    if (sortField) params.sortBy = sortField;
+    if (sortOrder) params.order = sortOrder;
+  
+    const url = `${environment.PRODUCTS_MS_URL}${environment.PRODUCTS_MS_PATH}`;
+    console.log("params ms -->", params);
+    const { data } = await axios.get(url, {
+      params,
+      timeout: environment.TIMEOUT,
+    });
+
+    if (data.products && data.products.length > 0) {
+      return { products: data.products, total: data.total, skip: data.skip, limit: data.limit };
+    } else {
+      throw new CustomError("Products not found", 404);
+    }
+
+  } catch (error: any) {
+      const status = error.response?.status || 500;
+      const message = error.response?.data?.errors?.[0]?.message || error.message || 'Error';
+
+      throw new CustomError(message, status);
+  }
+};

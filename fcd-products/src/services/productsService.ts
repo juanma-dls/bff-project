@@ -1,27 +1,45 @@
 import axios from "axios";
 import { environment } from "../config/environment";
 import { Request } from "express";
-import { parsePath } from "../utils/functions";
 import CustomError from "../utils/errors/customError";
+import { parseError } from "../helpers/parseError";
+
+const ALLOWED_SORT_FIELDS = ["price", "rating"];
+const DEFAULT_SORT_FIELD = "id";
+const DEFAULT_SORT_ORDER = "desc";
 
 export const productsService = async (req: Request) => {
   try {
-    const queryString = new URLSearchParams(req.query as Record<string, string>).toString();
-    const parseUrlPath = parsePath(environment.PRODUCTS_MS_PATH, {
-      queryString
-    });
-    const url = `${environment.PRODUCTS_MS_URL}${parseUrlPath}`;
+    const url = `${environment.PRODUCTS_MS_URL}${environment.PRODUCTS_MS_PATH}`;
 
+    const { sortField, sortOrder, query, limit, offset } = req.query as Record<string, string>;
+
+    if (sortField && !ALLOWED_SORT_FIELDS.includes(sortField)) {
+      throw new CustomError("You can only sort by price or rating", 400);
+    }
+
+    const msParams: Record<string, any> = {
+      sortField: sortField || DEFAULT_SORT_FIELD,
+      sortOrder: sortOrder === "asc" ? "asc" : DEFAULT_SORT_ORDER,
+      query: query,
+      limit: limit,
+      offset: offset
+    };
+    
     const { data } = await axios.get(url, {
-      params: req.query,
+      params: msParams,
       timeout: environment.TIMEOUT,
     });
+    const productsData = data.products;
     
-    return data || [];
-  } catch (error: any) {
-    const status = error.response?.status || 500;
-    const message = error.response?.data?.errors?.[0]?.message || error.message || 'Error';
+    if (productsData && productsData.products.length > 0) {
+      return productsData;
+    } else {
+      throw new CustomError("Products not found", 404);
+    }
 
+  } catch (error: unknown) {
+    const { status, message } = parseError(error, "Error while fetching products", 500);
     throw new CustomError(message, status);
-  };
+  }
 }

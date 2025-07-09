@@ -3,8 +3,9 @@ import axios from "axios";
 import { environment } from "../config/environment";
 import { Request } from "express";
 import CustomError from "../utils/errors/customError";
+import { parseError } from "../helpers/parseError";
 
-export const freeShippingService = async (req: Request) => {
+export const freeShippingService = async () => {
   try {
     const url = `${environment.PRODUCTS_MS_URL}${environment.FREE_SHIPPING_MS_PATH}`;
 
@@ -12,11 +13,13 @@ export const freeShippingService = async (req: Request) => {
       timeout: environment.TIMEOUT,
     });
   
-    return data || [];
-  } catch (error: any) {
-    const status = error.response?.status || 500;
-    const message = error.response?.data?.errors?.[0]?.message || error.message || 'Error';
-
+    if (data.length > 0) {
+      return data;
+    } else {
+      throw new CustomError("Products not found", 404);
+    }
+  } catch (error: unknown) {
+    const { status, message } = parseError(error, "Error while fetching products", 500);
     throw new CustomError(message, status);
   }
 }

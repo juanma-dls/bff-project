@@ -1,26 +1,24 @@
-import { Request } from "express";
 import { environment } from "../config/environment";
 import CustomError from "../utils/errors/customError";
-import { parsePath } from "../utils/functions";
 import axios from "axios";
+import { parseError } from "../helpers/parseError";
 
-export const productByCategoryService = async (req: Request) => {
+export const productByCategoryService = async (category: string) => {
   try {
-    const { category } = req.params
-    const parseUrlPath = parsePath(environment.CATEGORY_PRODUCT_MS_PATH, {
-      category
-    });
-    const url = `${environment.PRODUCTS_MS_URL}${parseUrlPath}${category}`;
+    const url = `${environment.PRODUCTS_MS_URL}${environment.CATEGORY_PRODUCT_MS_PATH}${category}`;
 
     const { data } = await axios.get(url, {
       timeout: environment.TIMEOUT,
     });
     
-    return data || [];
-  } catch (error: any) {
-    const status = error.response?.status || 500;
-    const message = error.response?.data?.errors?.[0]?.message || error.message || 'Error';
+    if (data.products.length > 0) {
+      return data;
+    } else {
+      throw new CustomError("Products not found", 404);
+    }
 
+  } catch (error: unknown) {
+    const { status, message } = parseError(error, "Error while fetching products", 500);
     throw new CustomError(message, status);
   }
 }

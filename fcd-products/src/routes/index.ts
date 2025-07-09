@@ -10,7 +10,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/products/category", productsCategoryRoutes);
 app.use("/api/products/category", deleteProductsByCategoryRotes);
 
-app.use("/health", (req, res) => {
+app.use("/health", (req: Request, res: Response) => {
   res.status(200).json({ status: "FCD status OK" });
 });
 
