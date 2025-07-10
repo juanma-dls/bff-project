@@ -1,0 +1,22 @@
+openapi: 3.0.1
+info:
+  title: int-products-ms
+  description: "Ms para la obtención de productos por parámetros y por categoría"
+  version: 1.0.0
+
+paths:
+  /api/categories:
+    get:
+      summary: Listar categorías
+      tags:
+        - Products
+      responses:
+        200:
+          description: Lista de categorías
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+    

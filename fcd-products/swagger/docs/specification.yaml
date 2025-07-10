@@ -1,0 +1,220 @@
+openapi: 3.0.1
+info:
+  title: products-facade
+  description: "Facade que expone endpoints para buscar, listar por categoría y eliminar productos."
+  version: 1.0.0
+
+paths:
+  /api/products/search:
+    get:
+      summary: "Buscar productos con filtros"
+      tags:
+        - Products
+      parameters:
+        - name: x-auth-token
+          in: header
+          required: true
+          description: "Token de autenticación"
+          schema:
+            type: string
+        - name: site
+          in: header
+          required: true
+          description: "Identificador del sitio"
+          schema:
+            type: string
+        - name: q
+          in: query
+          description: "Query de busqueda"
+          schema:
+            type: string
+        - name: minPrice
+          in: query
+          description: "Precio mínimo"
+          schema:
+            type: number
+        - name: maxPrice
+          in: query
+          description: "Precio máximo"
+          schema:
+            type: number
+        - name: sortBy
+          in: query
+          description: "Campo por el cual ordenar (price, rating)"
+          schema:
+            type: string
+            enum:
+              - price
+              - rating
+        - name: order
+          in: query
+          description: "Orden ascendente o descendente"
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+        - name: limit
+          in: query
+          description: "Cantidad máxima de productos"
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: "Desplazamiento inicial"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Lista de productos filtrados"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+
+  /api/products/category/{category}:
+    get:
+      summary: "Buscar productos por categoría"
+      tags:
+        - Products
+      parameters:
+        - name: x-auth-token
+          in: header
+          required: true
+          description: "Token de autenticación"
+          schema:
+            type: string
+        - name: site
+          in: header
+          required: true
+          description: "Identificador del sitio"
+          schema:
+            type: string
+        - name: category
+          in: path
+          required: true
+          description: "Categoría de los productos"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "Lista de productos por categoría"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategorySearchResponse'
+  
+  /api/products/category/{idProduct}:
+    delete:
+      summary: "Eliminar productos por categoría"
+      tags:
+        - Products
+      parameters:
+        - name: x-auth-token
+          in: header
+          required: true
+          description: "Token de autenticación"
+          schema:
+            type: string
+        - name: site
+          in: header
+          required: true
+          description: "Identificador del sitio"
+          schema:
+            type: string
+        - name: idProduct
+          in: path
+          required: true
+          description: "Categoría de los productos a eliminar"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "Resultado de la eliminación"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteResponse'
+
+components:
+  schemas:
+    SearchResponse:
+      type: object
+      properties:
+        paging:
+          type: object
+          properties:
+            total:
+              type: integer
+            offset:
+              type: integer
+            limit:
+              type: integer
+        categories:
+          type: array
+          items:
+            type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              title:
+                type: string
+              price:
+                type: number
+              picture:
+                type: string
+              price_with_discount:
+                type: number
+              rating:
+                type: number
+              free_shipping:
+                type: boolean
+
+    CategorySearchResponse:
+      type: object
+      properties:
+        paging:
+          type: object
+          properties:
+            total:
+              type: integer
+            offset:
+              type: integer
+            limit:
+              type: integer
+        category:
+          type: object
+          properties:
+            name:
+              type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              title:
+                type: string
+              price:
+                type: number
+              picture:
+                type: string
+              price_discount:
+                type: number
+              rating:
+                type: number
+              freeShipping:
+                type: boolean
+
+    DeleteResponse:
+      type: object
+      properties:
+        result:
+          type: string
+        items_delete:
+          type: integer

@@ -1,0 +1,136 @@
+openapi: 3.0.1
+info:
+  title: int-products-ms
+  description: "Ms para la obtención de productos por parámetros y por categoría"
+  version: 1.0.0
+
+paths:
+  /api/products/search:
+    get:
+      summary: "Buscar productos con filtros"
+      tags:
+        - Products
+      parameters:
+        - name: q
+          in: query
+          description: "Query de busqueda"
+          schema:
+            type: string
+        - name: sortBy
+          in: query
+          description: "Campo por el cual ordenar (price, rating)"
+          schema:
+            type: string
+            enum:
+              - price
+              - rating
+        - name: order
+          in: query
+          description: "Orden ascendente o descendente"
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+        - name: limit
+          in: query
+          description: "Cantidad máxima de productos"
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: "Desplazamiento inicial"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Lista de productos filtrados"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      type: object
+        '400':
+          description: "Error en los parámetros"
+      security:
+        - AuthToken: []
+        - SiteHeader: []
+  
+  /api/category/{category}:
+   get:
+     summary: Obtener productos por categoría
+     tags:
+       - Category
+     parameters:
+       - in: path
+         name: category
+         required: true
+         schema:
+           type: string
+         description: "Nombre de la categoría (ej: smartphones)"
+      #  - in: query
+      #    name: limit
+      #    schema:
+      #      type: integer
+      #    description: Cantidad de productos a devolver
+      #  - in: query
+      #    name: offset
+      #    schema:
+      #      type: integer
+      #    description: Desplazamiento inicial de los productos
+     responses:
+       200:
+         description: Lista de productos por categoría
+         content:
+           application/json:
+             schema:
+               type: object
+               properties:
+                 products:
+                   type: array
+                   items:
+                     type: object
+            
+  /api/products/free_shipping:
+   get:
+     summary: Listar productos con envío gratuito
+     tags:
+       - Products
+     responses:
+       200:
+         description: Lista de IDs de productos con envío gratis
+         content:
+           application/json:
+             schema:
+               type: array
+               items:
+                 type: integer
+              
+  /api/products/{id}:
+    delete:
+      summary: Eliminar producto por ID
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del producto a eliminar
+      responses:
+        200:
+          description: Producto eliminado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    type: object
+        404:
+          description: Producto no encontrado
