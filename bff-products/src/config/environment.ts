@@ -7,4 +7,6 @@ export const environment = {
   FCD_SEARCH_PRODUCTS_PATH: process.env.FCD_SEARCH_PRODUCTS_PATH || "",
   FCD_PRODUCTS_CATEGORY_PATH: process.env.FCD_PRODUCTS_CATEGORY_PATH || "",
   TIMEOUT: process.env.TIMEOUT ? parseInt(process.env.TIMEOUT, 10) : 20000,
+  TOKEN_VALIDO: process.env.TOKEN_VALIDO || "",
+  TOKEN_ALTERNATIVO: process.env.TOKEN_ALTERNATIVO || "",
 };
