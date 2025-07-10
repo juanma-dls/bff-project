@@ -23,7 +23,6 @@ export const searchProductController = async (req: Request, res: Response, next:
     const filteredProducts = productsResponse.products.filter((product: Products) => {
       if (minPrice && product.price < Number(minPrice)) return false;
       if (maxPrice && product.price > Number(maxPrice)) return false;
-      if (title && !product.title.toLowerCase().includes(title.toLowerCase())) return false;
       return true;
     });
     

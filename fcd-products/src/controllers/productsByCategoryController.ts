@@ -49,7 +49,7 @@ export const productsByCategoryController = async (req: Request, res: Response, 
         freeShipping: freeShippingSet.has(product.id),
       }))
     };
-    console.log("response", response);
+    
     return res.status(200).json(response);
   } catch (error) {
     next(error);
