@@ -1,5 +1,6 @@
+import { environment } from "./config/environment";
 import server from "./server/index";
 
-server.listen(3002, () => {
-  console.log(`Server is running on port 3002`);
+server.listen(environment.PORT, () => {
+  console.log(`Server is running on port ${environment.PORT}`);
 });
