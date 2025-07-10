@@ -3,9 +3,8 @@
 build:
 	docker-compose build
 
-up -d:
+up-d:
 	docker-compose up -d
-
 
 up:
 	docker-compose up
@@ -28,3 +27,12 @@ up-%:
 
 logs-%:
 	docker-compose logs -f $*
+
+test-all:
+	docker-compose exec int-products-ms npm test
+	docker-compose exec int-category-ms npm test
+	docker-compose exec fcd-products npm test
+	docker-compose exec bff-products npm test
+
+test-%:
+	docker-compose exec $* npm test
