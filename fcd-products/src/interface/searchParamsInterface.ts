@@ -1,6 +1,5 @@
 export interface SearchQueryParams {
-  category: string;
-  minPrice: number;
-  maxPrice: number;
-  title: string;
+  q?: string;
+  minPrice?: number;
+  maxPrice?: number;
 }

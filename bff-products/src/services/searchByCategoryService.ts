@@ -2,6 +2,7 @@ import axios from "axios";
 import { environment } from "../config/environment";
 import { Request } from "express";
 import CustomError from "../utils/errors/customError";
+import { parseError } from "../helpers/parseError";
 
 
 export const searchByCategoryService = async (req: Request ) => {
@@ -23,10 +24,8 @@ export const searchByCategoryService = async (req: Request ) => {
       throw new CustomError("Products not found", 404);
     }
     
-  } catch (error: any) {
-    const status = error.response?.status || 500;
-    const message = error.response?.data?.errors?.[0]?.message || error.message || 'Error';
-
-    throw new CustomError(message, status);
-  }
+    } catch (error: unknown) {
+      const { status, message } = parseError(error, "Error while fetching free shipping products", 500);
+      throw new CustomError(message, status);
+    }
 }
