@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { productsByCategoryController } from "../controllers/productsByCategoryController";
 import { setHeaders } from "../utils/middlewares"
-import validateRequest from "../utils/middlewares/validateRequest";
+import { validateHeaders } from "../utils/middlewares/validations/validateHeaders";
 
 const router = Router();
 
-router.get("/:category", validateRequest, setHeaders ,productsByCategoryController);
+router.get("/:category", validateHeaders, setHeaders ,productsByCategoryController);
 
 export default router;

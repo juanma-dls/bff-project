@@ -18,7 +18,7 @@ export const searchProductController = async (req: Request, res: Response, next:
     const freeShippingProducts = await freeShippingService();
     const freeShippingSet = new Set(freeShippingProducts.map((product: Products) => product.id));
 
-    const { minPrice, maxPrice, title } = parseSearchParams(req.query);
+    const { minPrice, maxPrice } = parseSearchParams(req.query);
     
     const filteredProducts = productsResponse.products.filter((product: Products) => {
       if (minPrice && product.price < Number(minPrice)) return false;

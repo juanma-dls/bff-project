@@ -1,11 +1,10 @@
 import { SearchQueryParams } from "../interface/searchParamsInterface";
 
-function parseSearchParams(query: any): SearchQueryParams {
+function parseSearchParams(query: Record<string, unknown>): SearchQueryParams {
   return {
-    category: typeof query.category === 'string' ? query.category : undefined,
+    q: typeof query.q === 'string' ? query.q : undefined,
     minPrice: query.minPrice ? Number(query.minPrice) : 0,
-    maxPrice: query.maxPrice ? Number(query.maxPrice) : 0,
-    title: typeof query.title === 'string' ? query.title : undefined,
+    maxPrice: query.maxPrice ? Number(query.maxPrice) : 0
   }
 }
 
