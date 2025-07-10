@@ -7,20 +7,10 @@ export const productService = async (req: Request) => {
 
   try {
 
-    const { query, sortField, sortOrder, limit, offset } = req.query as Record<string, string>;
-
-    const params: Record<string, any> = {};
-
-    if (query) params.q = query;
-    if (limit) params.limit = Number(limit);
-    if (offset) params.skip = Number(offset);
-    if (sortField) params.sortBy = sortField;
-    if (sortOrder) params.order = sortOrder;
-  
     const url = `${environment.PRODUCTS_MS_URL}${environment.PRODUCTS_MS_PATH}`;
-    
+
     const { data } = await axios.get(url, {
-      params,
+      params: req.query,
       timeout: environment.TIMEOUT,
     });
 

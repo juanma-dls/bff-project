@@ -11,12 +11,20 @@ paths:
       tags:
         - Products
       parameters:
-        - name: sortField
+        - name: q
           in: query
-          description: "Campo por el cual ordenar (ej: price)"
+          description: "Query de busqueda"
           schema:
             type: string
-        - name: sortOrder
+        - name: sortBy
+          in: query
+          description: "Campo por el cual ordenar (price, rating)"
+          schema:
+            type: string
+            enum:
+              - price
+              - rating
+        - name: order
           in: query
           description: "Orden ascendente o descendente"
           schema:
