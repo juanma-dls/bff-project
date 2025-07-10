@@ -18,7 +18,6 @@ La comunicación entre servicios se realiza vía HTTP y cada servicio corre en s
 
 - Docker y Docker Compose instalados
 - Node.js (opcional, solo si quieres correr servicios localmente)
-- Make (opcional, para usar el Makefile)
 
 ### 2. Variables de entorno
 
