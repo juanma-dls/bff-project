@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { deleteProductsByCategoryController } from "../controllers/deleteProductsByCategoryController";
 import { setHeaders } from "../utils/middlewares"
-import validateRequest from "../utils/middlewares/validateRequest";
+import { validateHeaders } from "../utils/middlewares/validations/validateHeaders";
+
 
 const router = Router();
 
-router.delete("/:category", validateRequest, setHeaders ,deleteProductsByCategoryController);
+router.delete("/:category", validateHeaders, setHeaders ,deleteProductsByCategoryController);
 
 export default router;
