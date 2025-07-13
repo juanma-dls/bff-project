@@ -14,16 +14,35 @@ export const validateSearchQuery = [
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      throw new CustomError(errors.array().map(e => e.msg).join(", "), 400);
+      throw new CustomError(
+        errors
+          .array()
+          .map((e) => e.msg)
+          .join(", "),
+        400,
+      );
     }
 
-    const allowedParams = ["q", "minPrice", "maxPrice", "limit", "offset", "sortBy", "order"];
-    const extraParams = Object.keys(req.query).filter(key => !allowedParams.includes(key));
+    const allowedParams = [
+      "q",
+      "minPrice",
+      "maxPrice",
+      "limit",
+      "offset",
+      "sortBy",
+      "order",
+    ];
+    const extraParams = Object.keys(req.query).filter(
+      (key) => !allowedParams.includes(key),
+    );
 
     if (extraParams.length > 0) {
-      throw new CustomError(`Unexpected query parameters: ${extraParams.join(", ")}`, 400);
+      throw new CustomError(
+        `Unexpected query parameters: ${extraParams.join(", ")}`,
+        400,
+      );
     }
 
     next();
-  }
+  },
 ];

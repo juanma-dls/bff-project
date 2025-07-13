@@ -8,8 +8,8 @@ declare module "express" {
   }
 }
 
-export const setHeaders = ( req: Request ,res: Response, next: NextFunction) => {
-  const token = req.headers['x-auth-token'] as string || '';
+export const setHeaders = (req: Request, res: Response, next: NextFunction) => {
+  const token = (req.headers["x-auth-token"] as string) || "";
 
   if (token === environment.TOKEN_ALTERNATIVO) {
     req.isMock = true;
@@ -20,4 +20,4 @@ export const setHeaders = ( req: Request ,res: Response, next: NextFunction) => 
     throw new CustomError("Unauthorized", 401);
   }
   next();
-}
+};

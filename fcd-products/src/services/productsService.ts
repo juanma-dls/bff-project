@@ -4,9 +4,6 @@ import { Request } from "express";
 import CustomError from "../utils/errors/customError";
 import { parseError } from "../helpers/parseError";
 
-const ALLOWED_SORT_FIELDS = ["price", "rating"];
-const DEFAULT_SORT_ORDER = "asc";
-
 export const productsService = async (req: Request) => {
   try {
     const url = `${environment.PRODUCTS_MS_URL}${environment.PRODUCTS_MS_PATH}`;
@@ -23,9 +20,12 @@ export const productsService = async (req: Request) => {
     } else {
       throw new CustomError("Products not found", 404);
     }
-
   } catch (error: unknown) {
-    const { status, message } = parseError(error, "Error while fetching products", 500);
+    const { status, message } = parseError(
+      error,
+      "Error while fetching products",
+      500,
+    );
     throw new CustomError(message, status);
   }
 };

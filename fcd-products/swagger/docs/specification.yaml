@@ -65,12 +65,12 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: "Lista de productos filtrados"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SearchResponse'
+                $ref: "#/components/schemas/SearchResponse"
 
   /api/products/category/{category}:
     get:
@@ -97,13 +97,13 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: "Lista de productos por categoría"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CategorySearchResponse'
-  
+                $ref: "#/components/schemas/CategorySearchResponse"
+
   /api/products/category/{idProduct}:
     delete:
       summary: "Eliminar productos por categoría"
@@ -129,12 +129,12 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: "Resultado de la eliminación"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DeleteResponse'
+                $ref: "#/components/schemas/DeleteResponse"
 
 components:
   schemas:

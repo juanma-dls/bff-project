@@ -1,7 +1,7 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import productRoutes from "./productRoutes";
-import productsCategoryRoutes from "./productsByCategoryRoutes"
-import deleteProductsByCategoryRotes from "./deleteProductsByCategoryRoutes"
+import productsCategoryRoutes from "./productsByCategoryRoutes";
+import deleteProductsByCategoryRotes from "./deleteProductsByCategoryRoutes";
 import errorHandler from "../utils/middlewares/errorHandler";
 
 const app = express();
