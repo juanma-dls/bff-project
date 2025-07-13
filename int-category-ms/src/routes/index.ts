@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import categoryRoutes from "./categoryRoutes";
 import errorHandler from "../utils/middlewares/errorHandler";
 

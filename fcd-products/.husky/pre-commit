@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+set -x
+
+echo "[fcd-products] Corriendo lint..."
+npm run lint || exit 1
+echo "[fcd-products] Corriendo prettier-check..."
+npm run prettier-check || exit 1
+# echo "[fcd-products] Corriendo tests..."
+# npm test || exit 1

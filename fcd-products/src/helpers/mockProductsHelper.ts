@@ -6,7 +6,7 @@ export const generateSearchMockProducts = (): SearchResponse => {
     id: String(index + 1),
     title: faker.commerce.productName(),
     price: parseFloat(faker.commerce.price()),
-    picture: faker.image.urlLoremFlickr({ category: 'technics' }),
+    picture: faker.image.urlLoremFlickr({ category: "technics" }),
     price_with_discount: parseFloat((Math.random() * 100).toFixed(2)),
     rating: parseFloat((Math.random() * 5).toFixed(2)),
     free_shipping: faker.datatype.boolean(),
@@ -28,7 +28,7 @@ export const generateCategoryMockProducts = (): SearchResponse => {
     id: String(index + 1),
     title: faker.commerce.productName(),
     price: parseFloat(faker.commerce.price()),
-    picture: faker.image.urlLoremFlickr({ category: 'technics' }),
+    picture: faker.image.urlLoremFlickr({ category: "technics" }),
     price_with_discount: parseFloat((Math.random() * 100).toFixed(2)),
     rating: parseFloat((Math.random() * 5).toFixed(2)),
     free_shipping: faker.datatype.boolean(),
@@ -40,7 +40,7 @@ export const generateCategoryMockProducts = (): SearchResponse => {
       offset: 0,
       limit: 5,
     },
-    category: { name: "mocked-category"},
+    category: { name: "mocked-category" },
     items: products,
   };
 };
@@ -48,6 +48,6 @@ export const generateCategoryMockProducts = (): SearchResponse => {
 export const generateDeleteMockProducts = () => {
   return {
     result: "ok",
-    items_delete: faker.number.int({ min: 20, max: 30 })
-  }
-}
+    items_delete: faker.number.int({ min: 20, max: 30 }),
+  };
+};

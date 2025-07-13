@@ -25,12 +25,12 @@ describe("GET /api/products/category/:category", () => {
       .get("/api/products/category/smartphones")
       .set("x-auth-token", environment.TOKEN_ALTERNATIVO)
       .set("site", randomSite);
-      expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty("paging");
-      expect(res.body).toHaveProperty("category");
-      expect(res.body).toHaveProperty("items");
-      expect(Array.isArray(res.body.items)).toBe(true);
-      expect(res.body.category.name).toMatch(/mock/i);
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("paging");
+    expect(res.body).toHaveProperty("category");
+    expect(res.body).toHaveProperty("items");
+    expect(Array.isArray(res.body.items)).toBe(true);
+    expect(res.body.category.name).toMatch(/mock/i);
   });
 
   it("should return 401 if token is missing or invalid", async () => {

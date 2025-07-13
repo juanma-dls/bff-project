@@ -25,7 +25,7 @@ describe("GET /api/products/category/:category", () => {
       .get("/api/products/category/smartphones")
       .set("x-auth-token", environment.TOKEN_ALTERNATIVO)
       .set("site", randomSite);
-      expect([200, 400, 404]).toContain(res.status);
+    expect([200, 400, 404]).toContain(res.status);
     if (res.status === 200) {
       expect(res.body).toHaveProperty("paging");
       expect(res.body).toHaveProperty("category");

@@ -1,8 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { freeShippingService } from "../services/freeShippingService";
 
-export const freeShippingController = async (req: Request, res: Response, next: NextFunction) => {
-
+export const freeShippingController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const freeShippingIds = await freeShippingService();
 
@@ -10,4 +13,4 @@ export const freeShippingController = async (req: Request, res: Response, next: 
   } catch (error) {
     next(error);
   }
-}
+};

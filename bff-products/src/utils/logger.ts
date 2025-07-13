@@ -8,12 +8,12 @@ export const logger = winston.createLogger({
   level: "info",
   format: winston.format.combine(
     winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-    logFormat
+    logFormat,
   ),
   transports: [
     new winston.transports.Console(),
-    new winston.transports.File({ filename: "logs/app.log" })
-  ]
+    new winston.transports.File({ filename: "logs/app.log" }),
+  ],
 });
 
 const allowedHeaders = ["x-auth-token", "site", "user-agent", "host"];
@@ -28,7 +28,12 @@ function filterHeaders(headers: Record<string, any>) {
   return filtered;
 }
 
-export const logRequest = (req: any, res: any, body: any, elapsedTime: number) => {
+export const logRequest = (
+  req: any,
+  res: any,
+  body: any,
+  elapsedTime: number,
+) => {
   const { method, originalUrl, url, query, body: requestBody, headers } = req;
   const status = res.statusCode;
 
@@ -40,7 +45,7 @@ Status: ${status}
 Headers: ${JSON.stringify(filterHeaders(headers), null, 2)}
 Query: ${JSON.stringify(query, null, 2)}
 Body: ${JSON.stringify(requestBody, null, 2)}
-Response body: ${typeof body === 'string' ? JSON.stringify(JSON.parse(body), null, 2) : JSON.stringify(body, null, 2)}
+Response body: ${typeof body === "string" ? JSON.stringify(JSON.parse(body), null, 2) : JSON.stringify(body, null, 2)}
 Elapsed time: ${elapsedTime} ms
 ========== [Request End] ============
 `;

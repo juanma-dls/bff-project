@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request } from "express";
 import searchProductRoutes from "./searchProductRoutes";
 import searchByCategoryRoutes from "./searchByCategoryRoutes";
 import deleteByCategoryRoutes from "./deleteByCategoryRoutes";
@@ -9,15 +9,15 @@ const app = express();
 
 app.use("/api/products", searchProductRoutes);
 app.use("/api/products/category/", searchByCategoryRoutes);
-app.use("/api/products/category/", deleteByCategoryRoutes)
+app.use("/api/products/category/", deleteByCategoryRoutes);
 
 app.use("/health", (req, res) => {
   res.status(200).json({ status: "BFF status OK" });
 });
 
 app.all("*", (req: Request) => {
-  throw new NotFoundError(req.path)
-})
+  throw new NotFoundError(req.path);
+});
 
 app.use(errorHandler);
 

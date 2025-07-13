@@ -28,9 +28,9 @@ describe("GET /api/products/search", () => {
     expect(res.body).toHaveProperty("paging");
     expect(res.body).toHaveProperty("items");
     expect(Array.isArray(res.body.items)).toBe(true);
-    expect(res.body.categories).toEqual(expect.arrayContaining([
-      expect.stringMatching(/mock/i)
-    ]));
+    expect(res.body.categories).toEqual(
+      expect.arrayContaining([expect.stringMatching(/mock/i)]),
+    );
   });
 
   it("should return 401 if token is missing or invalid", async () => {

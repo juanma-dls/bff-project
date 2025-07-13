@@ -37,4 +37,3 @@ describe("GET /api/products/search", () => {
     expect([401]).toContain(res.status);
   });
 });
-

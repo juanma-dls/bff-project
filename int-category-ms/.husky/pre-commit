@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+set -x
+
+echo "[int-category-ms] Corriendo lint..."
+npm run lint || exit 1
+echo "[int-category-ms] Corriendo prettier-check..."
+npm run prettier-check || exit 1
+echo "[int-category-ms] Corriendo tests..."
+npm test || exit 1

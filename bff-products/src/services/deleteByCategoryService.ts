@@ -4,12 +4,11 @@ import { Request } from "express";
 import CustomError from "../utils/errors/customError";
 import { parseError } from "../helpers/parseError";
 
-
-export const deleteByCategoryService = async (req: Request ) => {
+export const deleteByCategoryService = async (req: Request) => {
   try {
-    const { category } = req.params
+    const { category } = req.params;
     const url = `${environment.FCD_SEARCH_PRODUCTS_URL}${environment.FCD_PRODUCTS_CATEGORY_PATH}${category}`;
-    const headers = req.headers
+    const headers = req.headers;
 
     const { data } = await axios.delete(url, {
       headers,
@@ -20,9 +19,12 @@ export const deleteByCategoryService = async (req: Request ) => {
     } else {
       throw new CustomError("Products not found", 404);
     }
-    
-    } catch (error: unknown) {
-      const { status, message } = parseError(error, "Error while fetching free shipping products", 500);
-      throw new CustomError(message, status);
-    }
-}
+  } catch (error: unknown) {
+    const { status, message } = parseError(
+      error,
+      "Error while fetching free shipping products",
+      500,
+    );
+    throw new CustomError(message, status);
+  }
+};

@@ -16,10 +16,12 @@ export const categoriesService = async () => {
     } else {
       throw new CustomError("Products not found", 404);
     }
-
   } catch (error: unknown) {
-    const { status, message } = parseError(error, "Error while fetching products", 500);
+    const { status, message } = parseError(
+      error,
+      "Error while fetching products",
+      500,
+    );
     throw new CustomError(message, status);
   }
-
-}
+};

@@ -6,7 +6,11 @@ export interface ParsedError {
   status: number;
 }
 
-export const parseError = (error: unknown, defaultMessage = "Unexpected error", defaultStatus = 500): ParsedError => {
+export const parseError = (
+  error: unknown,
+  defaultMessage = "Unexpected error",
+  defaultStatus = 500,
+): ParsedError => {
   if (axios.isAxiosError(error)) {
     return {
       status: error.response?.status || defaultStatus,

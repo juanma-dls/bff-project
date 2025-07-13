@@ -6,8 +6,11 @@ import parseSearchParams from "../helpers/searchParamsHelper";
 import { Products } from "../interface/productInterface";
 import { generateSearchMockProducts } from "../helpers/mockProductsHelper";
 
-
-export const searchProductController = async (req: Request, res: Response, next: NextFunction) => {
+export const searchProductController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     if (req.isMock) {
       const mockResponse = generateSearchMockProducts();
@@ -16,17 +19,23 @@ export const searchProductController = async (req: Request, res: Response, next:
 
     const productsResponse = await productsService(req);
     const freeShippingProducts = await freeShippingService();
-    const freeShippingSet = new Set(freeShippingProducts.map((product: Products) => product.id));
+    const freeShippingSet = new Set(
+      freeShippingProducts.map((product: Products) => product.id),
+    );
 
     const { minPrice, maxPrice } = parseSearchParams(req.query);
-    
-    const filteredProducts = productsResponse.products.filter((product: Products) => {
-      if (minPrice && product.price < Number(minPrice)) return false;
-      if (maxPrice && product.price > Number(maxPrice)) return false;
-      return true;
-    });
-    
-    const categoriesSet = Array.from(new Set(filteredProducts.map((product: Products) => product.category)));
+
+    const filteredProducts = productsResponse.products.filter(
+      (product: Products) => {
+        if (minPrice && product.price < Number(minPrice)) return false;
+        if (maxPrice && product.price > Number(maxPrice)) return false;
+        return true;
+      },
+    );
+
+    const categoriesSet = Array.from(
+      new Set(filteredProducts.map((product: Products) => product.category)),
+    );
 
     const result: SearchResponse = {
       paging: {
@@ -40,9 +49,11 @@ export const searchProductController = async (req: Request, res: Response, next:
         title: product.title,
         price: product.price,
         picture: product.thumbnail,
-        price_with_discount: Number((product.price * (1 - product.discountPercentage / 100)).toFixed(2)),
+        price_with_discount: Number(
+          (product.price * (1 - product.discountPercentage / 100)).toFixed(2),
+        ),
         rating: product.rating,
-        free_shipping: freeShippingSet.has(product.id)
+        free_shipping: freeShippingSet.has(product.id),
       })),
     };
 
