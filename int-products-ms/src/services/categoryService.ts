@@ -12,7 +12,7 @@ export const categoryService = async (req: Request) => {
     const { data } = await axios.get(url, {
       timeout: environment.TIMEOUT,
     });
-
+    console.log(data);
     const products = data.products;
 
     if (products && products.length > 0) {
