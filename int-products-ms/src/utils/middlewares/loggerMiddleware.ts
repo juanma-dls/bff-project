@@ -1,7 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { logRequest } from "../logger"
+import { logRequest } from "../logger";
 
-export const loggerMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const loggerMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const start = Date.now();
 
   const originalSend = res.send;
