@@ -1,7 +1,6 @@
 import CustomError from "../../../utils/errors/customError";
 import errorHandler from "../../../utils/middlewares/errorHandler";
 
-
 describe("errorHandler middleware", () => {
   const mockReq = {} as any;
   const mockNext = jest.fn();
