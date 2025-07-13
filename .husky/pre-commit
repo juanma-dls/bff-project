@@ -1,0 +1,28 @@
+#!/bin/sh
+set -x
+
+. "$(git rev-parse --show-toplevel)/.husky/_/husky.sh" 2>/dev/null || true
+
+if [ -f int-products-ms/.husky/pre-commit ]; then
+  echo "[int-products-ms] Ejecutando pre-commit..."
+  cd int-products-ms && .husky/pre-commit || exit 1
+  cd - >/dev/null
+fi
+
+# if [ -f int-category-ms/.husky/pre-commit ]; then
+#   echo "[int-category-ms] Ejecutando pre-commit..."
+#   cd int-category-ms && .husky/pre-commit || exit 1
+#   cd - >/dev/null
+# fi
+
+# if [ -f fcd-products/.husky/pre-commit ]; then
+#   echo "[fcd-products] Ejecutando pre-commit..."
+#   cd fcd-products && .husky/pre-commit || exit 1
+#   cd - >/dev/null
+# fi
+
+# if [ -f bff-products/.husky/pre-commit ]; then
+#   echo "[bff-products] Ejecutando pre-commit..."
+#   cd bff-products && .husky/pre-commit || exit 1
+#   cd - >/dev/null
+# fi

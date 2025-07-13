@@ -1,0 +1,11 @@
+#!/bin/sh
+set -x
+
+. "$(git rev-parse --show-toplevel)/.husky/_/husky.sh"
+
+echo "[int-products-ms] Corriendo lint..."
+npm run lint || exit 1
+echo "[int-products-ms] Corriendo prettier-check..."
+npm run prettier-check || exit 1
+echo "[int-products-ms] Corriendo tests..."
+npm test || exit 1
