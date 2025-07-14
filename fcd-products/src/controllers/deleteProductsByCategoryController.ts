@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import CustomError from "../utils/errors/customError";
 import { categoriesService } from "../services/categoriesService";
-import { productByCategoryService } from "../services/productsByCategoryService";
+import { productsByCategoryService } from "../services/productsByCategoryService";
 import { deleteProductByIdService } from "../services/deleteProductByIdService";
 import { Products } from "../interface/productInterface";
 import { generateDeleteMockProducts } from "../helpers/mockProductsHelper";
@@ -27,7 +27,7 @@ export const deleteProductsByCategoryController = async (
       throw new CustomError("Category is not valid", 400);
     }
 
-    const { products } = await productByCategoryService(categoryParam);
+    const { products } = await productsByCategoryService(categoryParam);
 
     const deleteResults = await Promise.allSettled(
       products.map((product: Products) => deleteProductByIdService(product.id)),
