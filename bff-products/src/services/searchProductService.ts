@@ -21,6 +21,10 @@ export const searchProductService = async (req: Request) => {
       throw new CustomError("Products not found", 404);
     }
   } catch (error: unknown) {
+    if (error instanceof CustomError) {
+      throw error;
+    }
+
     const { status, message } = parseError(
       error,
       "Error while fetching products",

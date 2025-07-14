@@ -11,12 +11,12 @@ const errorHandler = (
   logger.error(err);
 
   if (err instanceof CustomError) {
-    res.status(err.statusCode).send({ errors: err.serializeErrors() });
+    res.status(err.statusCode).json({ errors: err.serializeErrors() });
     return;
   }
 
-  res.status(400).send({
-    errors: [{ message: `Something went corrupte` }],
+  res.status(500).json({
+    errors: [{ message: "Internal Server Error" }],
   });
   next(err);
 };

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import CustomError from "../utils/errors/customError";
 import { categoriesService } from "../services/categoriesService";
-import { productByCategoryService } from "../services/productsByCategoryService";
+import { productsByCategoryService } from "../services/productsByCategoryService";
 import { freeShippingService } from "../services/freeShippingService";
 import { SearchResponse } from "../interface/searchResponseInterface";
 import { Products } from "../interface/productInterface";
@@ -26,7 +26,7 @@ export const productsByCategoryController = async (
       throw new CustomError("Category is not valid", 400);
     }
 
-    const products = await productByCategoryService(categoryParam);
+    const products = await productsByCategoryService(categoryParam);
 
     const freeShippingProducts = await freeShippingService();
 

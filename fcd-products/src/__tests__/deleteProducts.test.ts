@@ -1,37 +1,72 @@
 import request from "supertest";
 import server from "../server";
 import { environment } from "../config/environment";
+import { mockedCategory } from "../mocks/categoryMock";
+import { mockedProductDelete } from "../mocks/productDeleteMock";
+import { mockedProductsResponse } from "../mocks/productsMock";
+import { categoriesService } from "../services/categoriesService";
+import { deleteProductByIdService } from "../services/deleteProductByIdService";
+import { productsByCategoryService } from "../services/productsByCategoryService";
 
-const sites = ["MLA", "MLB", "MLM"];
-const randomSite = sites[Math.floor(Math.random() * sites.length)];
+jest.mock("../services/categoriesService");
+jest.mock("../services/deleteProductByIdService");
+jest.mock("../services/productsByCategoryService");
 
-describe("DELETE /api/products/category/:category", () => {
-  it("should return real data with TOKEN_VALIDO", async () => {
+describe("DELETE /api/products/category (mocked services)", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should return expected structure using mocked microservices", async () => {
+    (categoriesService as jest.Mock).mockResolvedValue(mockedCategory);
+    (deleteProductByIdService as jest.Mock).mockResolvedValue(
+      mockedProductDelete,
+    );
+    (productsByCategoryService as jest.Mock).mockResolvedValue(
+      mockedProductsResponse,
+    );
+
     const res = await request(server)
       .delete("/api/products/category/smartphones")
       .set("x-auth-token", environment.TOKEN_VALIDO)
-      .set("site", randomSite);
-    expect([200, 400, 404]).toContain(res.status);
-    if (res.status === 200) {
-      expect(res.body).toHaveProperty("result");
-      expect(res.body).toHaveProperty("items_delete");
-    }
+      .set("site", "MLA");
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("result", "ok");
+    expect(res.body).toHaveProperty("items_delete", 2);
   });
 
-  it("should return mock data with TOKEN_ALTERNATIVO", async () => {
+  it("should return 400 if category is invalid", async () => {
+    // Mockeo categorías permitidas, sin incluir 'beauty'
+    (categoriesService as jest.Mock).mockResolvedValue([
+      "smartphones",
+      "laptops",
+    ]);
+
+    const res = await request(server)
+      .delete("/api/products/category/beauty") // categoría inválida respecto al mock
+      .set("x-auth-token", environment.TOKEN_VALIDO)
+      .set("site", "MLA");
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("errors");
+    expect(res.body.errors[0].message).toMatch(/category is not valid/i);
+  });
+
+  it("should return 400 if token or site is missing", async () => {
     const res = await request(server)
       .delete("/api/products/category/smartphones")
-      .set("x-auth-token", environment.TOKEN_ALTERNATIVO)
-      .set("site", randomSite);
-    expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty("result");
-    expect(res.body).toHaveProperty("items_delete");
+      .set("site", "MLA"); // falta token
+
+    expect(res.status).toBe(400);
   });
 
-  it("should return 401 if token is missing or invalid", async () => {
+  it("should return 401 if token is invalid", async () => {
     const res = await request(server)
-      .get("/api/products/search?q=iphone")
-      .set("site", randomSite);
-    expect([401]).toContain(res.status);
+      .delete("/api/products/category/smartphones")
+      .set("x-auth-token", "xxxx-xxxx-xxxx-xxxx") // token inválido
+      .set("site", "MLA");
+
+    expect(res.status).toBe(401);
   });
 });

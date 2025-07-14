@@ -3,7 +3,7 @@ import CustomError from "../utils/errors/customError";
 import axios from "axios";
 import { parseError } from "../helpers/parseError";
 
-export const productByCategoryService = async (category: string) => {
+export const productsByCategoryService = async (category: string) => {
   try {
     const url = `${environment.PRODUCTS_MS_URL}${environment.CATEGORY_PRODUCT_MS_PATH}${category}`;
 
@@ -17,11 +17,16 @@ export const productByCategoryService = async (category: string) => {
       throw new CustomError("Products not found", 404);
     }
   } catch (error: unknown) {
+    if (error instanceof CustomError) {
+      throw error;
+    }
+
     const { status, message } = parseError(
       error,
       "Error while fetching products",
       500,
     );
+
     throw new CustomError(message, status);
   }
 };
