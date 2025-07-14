@@ -122,7 +122,7 @@ docker compose run --rm fcd-products npm test && \
 docker compose run --rm bff-products npm test
 ```
 
-Comandos para ver la cobertura de los tests de forma individual, para cada microservicio:
+Comandos para ver el coverage de los tests de forma individual, para cada microservicio:
 
 ```sh
 docker compose run --rm int-products-ms npm test-coverage
