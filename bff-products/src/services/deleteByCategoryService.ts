@@ -20,11 +20,16 @@ export const deleteByCategoryService = async (req: Request) => {
       throw new CustomError("Products not found", 404);
     }
   } catch (error: unknown) {
+    if (error instanceof CustomError) {
+      throw error;
+    }
+
     const { status, message } = parseError(
       error,
-      "Error while fetching free shipping products",
+      "Error while fetching products",
       500,
     );
+
     throw new CustomError(message, status);
   }
 };

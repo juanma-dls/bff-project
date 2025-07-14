@@ -1,37 +1,65 @@
 import request from "supertest";
 import server from "../server";
 import { environment } from "../config/environment";
+import { deleteByCategoryService } from "../services/deleteByCategoryService";
+import CustomError from "../utils/errors/customError";
+import { mockedProductsDelete } from "../mocks/deleteProductsMock";
 
-const sites = ["MLA", "MLB", "MLM"];
-const randomSite = sites[Math.floor(Math.random() * sites.length)];
+jest.mock("../services/deleteByCategoryService");
 
-describe("DELETE /api/products/category/:category", () => {
-  it("should return real data with TOKEN_VALIDO", async () => {
+describe("DELETE /api/products/category (mocked services)", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should return expected structure using mocked microservices", async () => {
+    (deleteByCategoryService as jest.Mock).mockResolvedValue(
+      mockedProductsDelete,
+    );
+
     const res = await request(server)
       .delete("/api/products/category/smartphones")
       .set("x-auth-token", environment.TOKEN_VALIDO)
-      .set("site", randomSite);
-    expect([200, 400, 404]).toContain(res.status);
-    if (res.status === 200) {
-      expect(res.body).toHaveProperty("result");
-      expect(res.body).toHaveProperty("items_delete");
-    }
+      .set("site", "MLA");
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("result", "ok");
+    expect(res.body).toHaveProperty("items_delete", 2);
   });
 
-  it("should return mock data with TOKEN_ALTERNATIVO", async () => {
+  it("should return 400 if token or site is missing", async () => {
     const res = await request(server)
       .delete("/api/products/category/smartphones")
-      .set("x-auth-token", environment.TOKEN_ALTERNATIVO)
-      .set("site", randomSite);
-    expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty("result");
-    expect(res.body).toHaveProperty("items_delete");
+      .set("site", "MLA");
+    expect([400]).toContain(res.status);
   });
 
-  it("should return 401 if token is missing or invalid", async () => {
+  it("should return 401 if token is invalid", async () => {
+    (deleteByCategoryService as jest.Mock).mockRejectedValue(
+      new CustomError("Unauthorized", 401),
+    );
+
     const res = await request(server)
-      .get("/api/products/search?q=iphone")
-      .set("site", randomSite);
-    expect([401]).toContain(res.status);
+      .delete("/api/products/category/smartphones")
+      .set("x-auth-token", "xxxx-xxxx-xxxx-xxxx") // token inválido
+      .set("site", "MLA");
+
+    expect(res.status).toBe(401);
+    expect(res.body.errors).toEqual([{ message: "Unauthorized" }]);
+  });
+
+  it("should return 500 if fcd not respond", async () => {
+    (deleteByCategoryService as jest.Mock).mockRejectedValue(
+      new CustomError("Error while fetching products", 500),
+    );
+    const res = await request(server)
+      .delete("/api/products/category/smartphones")
+      .set("x-auth-token", environment.TOKEN_VALIDO)
+      .set("site", "MLA");
+
+    expect(res.status).toBe(500);
+    expect(res.body.errors).toEqual([
+      { message: "Error while fetching products" },
+    ]);
   });
 });
