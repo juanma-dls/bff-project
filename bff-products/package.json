@@ -1,5 +1,5 @@
 {
-  "name": "int-products-ms",
+  "name": "bff-products",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
     ]
   },
   "keywords": [],
-  "author": "",
+  "author": "Juan Manuel de los Santos",
   "license": "ISC",
   "description": "",
   "dependencies": {
