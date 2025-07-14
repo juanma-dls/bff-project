@@ -25,7 +25,7 @@ describe("GET /api/products/category (mocked services)", () => {
     (categoriesService as jest.Mock).mockResolvedValue(mockedCategory);
 
     const res = await request(server)
-      .get("/api/products/category/beauty")
+      .get("/api/products/category/smartphones")
       .set("x-auth-token", environment.TOKEN_VALIDO)
       .set("site", "MLA");
 
@@ -50,14 +50,14 @@ describe("GET /api/products/category (mocked services)", () => {
 
   it("should return 400 if token or site is missing", async () => {
     const res = await request(server)
-      .get("/api/products/search?q=iphone")
+      .get("/api/products/category/smartphones")
       .set("site", "MLA");
     expect([400]).toContain(res.status);
   });
 
   it("should return 401 if token is invalid", async () => {
     const res = await request(server)
-      .get("/api/products/search?q=iphone")
+      .get("/api/products/category/smartphones")
       .set("x-auth-token", "xxxx-xxxx-xxxx-xxxx")
       .set("site", "MLA");
     expect([401]).toContain(res.status);
