@@ -1,4 +1,4 @@
-# Proyecto Microservicios Productos
+# Test Práctico – Middle-End (BFF)
 
 ## Arquitectura
 
@@ -75,14 +75,15 @@ docker-compose down
 
 ## Descripción técnica del enfoque adoptado
 
-- **BFF**: expone endpoints REST y reenvía las peticiones al facade, sin lógica de negocio ni validación de tokens.
+- **BFF**: expone endpoints REST y reenvía las peticiones al facade, validando que los headers requeridos esten presentes.
 - **Facade**: recibe las peticiones del BFF, valida el token (`TOKEN_VALIDO` para datos reales, `TOKEN_ALTERNATIVO` para mock), aplica lógica de negocio, orquesta llamadas a los microservicios de integración y unifica la respuesta.
 - **Integrations**: microservicios desacoplados que se encargan de interactuar con APIs externas (por ejemplo, productos y categorías), devolviendo datos en el formato esperado por el facade.
 
 **Ventajas del enfoque:**
 - Separación clara de responsabilidades.
 - Facilidad para mockear datos y testear flujos alternativos.
-- Escalabilidad y mantenibilidad.
+- Escalabilidad y mantenibilidad. 
+- Reutilización del facade: el fcd-products centraliza la lógica de negocio, permitiendo que otros puedan integrarlo fácilmente desde sus propios BFFs sin duplicar lógica ni integraciones.
 
 ---
 
@@ -122,7 +123,7 @@ docker compose run --rm fcd-products npm test && \
 docker compose run --rm bff-products npm test
 ```
 
-Comandos para ver el coverage de los tests de forma individual, para cada microservicio:
+Comandos para ver la cobertura de los tests de forma individual, para cada microservicio:
 
 ```sh
 docker compose run --rm int-products-ms npm test-coverage
@@ -134,3 +135,33 @@ docker compose run --rm bff-products npm test-coverage
 ### Ver el reporte de coverage
 
 Después de ejecutar los comandos de coverage, se genera un reporte HTML accesible en `/coverage/lcov-report/index.html` dentro del microservicio correspondiente. Podés abrir este archivo en tu navegador para visualizar el detalle de la cobertura línea por línea.
+
+---
+
+## Puntos de mejora
+
+Al ser un proyecto básico de consumo y orquestación de microservicios, existen múltiples formas de mejorar la eficiencia, observabilidad y escalabilidad del sistema.
+
+**Obtencion de metricas en microservicios**
+Incorporar métricas permite obtener información accionable sobre el comportamiento del sistema y tomar decisiones más informadas. Se podrían integrar herramientas como Prometheus o Grafana y visualizar métricas como:
+
+- Cantidad de peticiones por endpoint (útil para detectar cuellos de botella).
+- Productos más buscados (mediante trazabilidad por product_id en el controller).
+- Categorías más populares.
+- Tiempos de respuesta por MS (latencia).
+- Errores por endpoint / servicio externo.
+
+Esto sería especialmente útil en el controller de int-products-ms, donde se podría instrumentar una métrica tipo counter para saber cuántas veces se busca cada producto.
+
+**Cacheo de informacion relevante**
+
+El uso de cache es clave para mejorar el rendimiento y reducir la carga sobre APIs externas.
+Se podrían aplicar estrategias de cacheo en el facade o en los integration MS para endpoints que consumen información poco cambiante, como por ejemplo:
+
+Listado de categorías (int-category-ms)
+Productos con free shipping (freeShippingService)
+
+---
+
+## Diagrama de secuencia
+![screenshot](/Diagrama%20de%20secuencia.drawio.png)
