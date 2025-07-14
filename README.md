@@ -12,13 +12,27 @@ La comunicación entre servicios se realiza vía HTTP y cada servicio corre en s
 
 ---
 
+## Tecnologías y herramientas utilizadas
+
+- **Node.js** (v22.17.0)
+- **TypeScript**
+- **Axios**: cliente HTTP para consumir APIs y Ms.
+- **Docker & Docker Compose**: contenerización y orquestación de microservicios.
+- **Prettier**: formateador automático de código para mantener estilo uniforme.
+- **ESLint**: linter para asegurar buenas prácticas y evitar errores comunes en el código.
+- **Husky**: hooks de Git para ejecutar linters y tests antes de commits.
+- **Supertest**: integración sobre endpoints HTTP.
+- **Jest**: tests unitarios e integración.
+- **Swagger**: documentación de APIs REST.
+
+---
+
 ## Instrucciones para correr el proyecto
 
 ### 1. Requisitos
 
 - Docker y Docker Compose instalados
-- Make (opcional)
-- Node.js (opcional, solo si quieres correr servicios localmente)
+- Node.js V22.17.0(opcional, solo si quieres correr servicios y tests localmente)
 
 ### 2. Variables de entorno
 
@@ -38,11 +52,11 @@ Desde la raíz del proyecto con Docker Compose:
 docker-compose build
 docker-compose up -d
 ```
-o directamente con Make en caso de tenerlo instalado:
+
+Si quieres ver los logs en la terminal
 
 ```sh
-make build
-make up-d
+docker-compose up
 ```
 
 Esto levantará los 4 microservicios en los puertos:
@@ -55,11 +69,6 @@ Esto levantará los 4 microservicios en los puertos:
 
 ```sh
 docker-compose down
-```
-o
-
-```sh
-make down
 ```
 
 ---
@@ -77,60 +86,51 @@ make down
 
 ---
 
-## Cobertura alcanzada y cómo correr los tests
-
-### Cobertura
-
-- Se proveen tests automáticos para los endpoints principales de cada microservicio.
-- Los tests cubren:
-  - Respuestas exitosas con `TOKEN_VALIDO`
-  - Respuestas mockeadas con `TOKEN_ALTERNATIVO`
-  - Errores por token inválido o ausente
-  - Estructura de las respuestas (`paging`, `items`, etc.)
-
----
-
 ## Documentación de endpoints
 
-- Puedes consultar la documentación Swagger de cada microservicio en `/swagger` (por ejemplo, http://localhost:3003/swagger para el BFF).
+Puedes consultar la documentación Swagger de cada microservicio en `/swagger` (por ejemplo, http://localhost:3003/swagger para el BFF).
 
 ---
 
 ## Tests
 
-### Cómo correr los tests
-
-Los tests no utilizan datos mockeados, sino que realizan peticiones HTTP reales contra los microservicios. Por lo tanto, todos los microservicios deben estar previamente levantados mediante Docker Compose `make up-d` o `docker-compose up -d`.
-Los tests utilizan Supertest para enviar las peticiones HTTP y validar las respuestas de los microservicios.
-
-Podes correr los tests de los microservicios con:
-
-```sh
-docker-compose exec int-products-ms npm test
-docker-compose exec int-category-ms npm test
-docker-compose exec fcd-products npm test
-docker-compose exec bff-products npm test
-```
-
-En el caso de tener make instalado podes correr todos los tests o de un microservicio específico:
-
-```sh
-make test-all
-```
-
-o
-
-```sh
-make test-bff-products
-make test-fcd-products
-make test-int-products-ms
-make test-int-category-ms
-```
-
-O bien, desde la carpeta de cada microservicio:
-
-```sh
-npm test
-```
-
 Los tests están ubicados en `src/__tests__/` dentro de cada microservicio.
+
+### Cobertura alcanzada y cómo correr los tests
+
+Los tests de los dos microservicios que integran APIs externas no utilizan datos mockeados, sino que realizan peticiones HTTP reales para validar la correcta integración con dichas APIs. Esto permite detectar de forma temprana posibles cambios o errores en las respuestas de terceros que podrían afectar el funcionamiento del sistema.
+
+En cambio, los tests del facade y del BBF utilizan datos mockeados. Esta decisión se basa en que ambos servicios consumen microservicios desarrollados internamente, cuyo comportamiento es conocido y controlado. Mockear sus respuestas permite ejecutar pruebas más rápidas y aisladas, sin depender de servicios externos. Además, ante cambios en los microservicios, es posible ajustar los mocks de forma controlada para garantizar que el facade o el BBF se adapten correctamente.
+
+Para las pruebas de integración, se utiliza Supertest para enviar solicitudes HTTP y validar las respuestas de los endpoints expuestos por los microservicios.
+
+Desde la raíz del proyecto, podés ejecutar los tests de cada microservicio de forma individual:
+
+```sh
+docker compose run --rm int-products-ms npm test
+docker compose run --rm int-category-ms npm test
+docker compose run --rm fcd-products npm test
+docker compose run --rm bff-products npm test
+```
+
+O bien ejecutar todos los tests juntos:
+
+```sh
+docker compose run --rm int-products-ms npm test && \
+docker compose run --rm int-category-ms npm test && \
+docker compose run --rm fcd-products npm test && \
+docker compose run --rm bff-products npm test
+```
+
+Comandos para ver la cobertura de los tests de forma individual, para cada microservicio:
+
+```sh
+docker compose run --rm int-products-ms npm test-coverage
+docker compose run --rm int-category-ms npm test-coverage
+docker compose run --rm fcd-products npm test-coverage
+docker compose run --rm bff-products npm test-coverage
+```
+
+### Ver el reporte de coverage
+
+Después de ejecutar los comandos de coverage, se genera un reporte HTML accesible en `/coverage/lcov-report/index.html` dentro del microservicio correspondiente. Podés abrir este archivo en tu navegador para visualizar el detalle de la cobertura línea por línea.
