@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   int-products-ms:
     build:
@@ -9,6 +8,7 @@ services:
       - "3000:3000"
     volumes:
       - ./int-products-ms:/usr/src/app
+      - /usr/src/app/node_modules
     environment:
       NODE_ENV: development
     command: npm run dev
@@ -24,6 +24,7 @@ services:
       - "3001:3001"
     volumes:
       - ./int-category-ms:/usr/src/app
+      - /usr/src/app/node_modules
     environment:
       NODE_ENV: development
     command: npm run dev
@@ -39,6 +40,7 @@ services:
       - "3002:3002"
     volumes:
       - ./fcd-products:/usr/src/app
+      - /usr/src/app/node_modules
     environment:
       NODE_ENV: development
     command: npm run dev
@@ -54,6 +56,7 @@ services:
       - "3003:3003"
     volumes:
       - ./bff-products:/usr/src/app
+      - /usr/src/app/node_modules
     environment:
       NODE_ENV: development
     command: npm run dev
